@@ -1,0 +1,60 @@
+name: Email Notification for ShareNodeLab
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'summary/**'
+      - 'directives/**'
+
+jobs:
+  send-email:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2  # To get the previous commit for comparison
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v14
+        with:
+          since_last_remote_commit: true
+
+      - name: Set up notification details
+        id: notification
+        run: |
+          echo "::set-output name=changed_files::$(echo '${{ steps.changed-files.outputs.all_changed_files }}')"
+          echo "::set-output name=commit_message::$(git log -1 --pretty=%B)"
+          echo "::set-output name=commit_time::$(git log -1 --pretty=%ad --date=iso)"
+          
+      - name: Send email notification
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.mail.yahoo.com
+          server_port: 465
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "ShareNodeLab Alert: New Update from Sam"
+          body: |
+            Hello Dr. Britton,
+            
+            Sam has created a new alert that requires your attention in the ShareNodeLab repository.
+            
+            Changed files:
+            ${{ steps.notification.outputs.changed_files }}
+            
+            Commit message:
+            ${{ steps.notification.outputs.commit_message }}
+            
+            Commit time:
+            ${{ steps.notification.outputs.commit_time }}
+            
+            You can view these changes at: https://github.com/sgahvet/sharenodelab-site
+            
+            This is an automated notification from the ShareNodeLab platform.
+          from: ShareNodeLab Notifications <sgahvet@yahoo.com.au>
+          to: sgahvet@yahoo.com.au
+          secure: true
