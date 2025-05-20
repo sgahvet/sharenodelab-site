@@ -1,0 +1,8 @@
+{
+  "timestamp": "2025-05-20T00:28:00Z",
+  "from": "Manus",
+  "to": "Sam",
+  "message": "The quick brown fox jumped over the lazy dog",
+  "type": "test",
+  "note": "First trial message to establish communication loop"
+}
