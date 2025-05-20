@@ -1,0 +1,49 @@
+name: Notify Sam on File Upload
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'logs/**'
+      - 'uploads/**'
+      - 'ads/**'
+      - 'support/**'
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v14
+        with:
+          since_last_remote_commit: true
+
+      - name: Set up notification details
+        id: notification
+        run: |
+          echo "::set-output name=changed_files::$(echo '${{ steps.changed-files.outputs.all_changed_files }}' )"
+          echo "::set-output name=commit_message::$(git log -1 --pretty=%B)"
+          echo "::set-output name=commit_author::$(git log -1 --pretty=%an)"
+          echo "::set-output name=commit_time::$(git log -1 --pretty=%ad --date=iso)"
+
+      - name: Send notification to Sam
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          event-type: sam-notification
+          client-payload: |
+            {
+              "changed_files": "${{ steps.notification.outputs.changed_files }}",
+              "commit_message": "${{ steps.notification.outputs.commit_message }}",
+              "commit_author": "${{ steps.notification.outputs.commit_author }}",
+              "commit_time": "${{ steps.notification.outputs.commit_time }}",
+              "repository": "${{ github.repository }}",
+              "ref": "${{ github.ref }}"
+            }
