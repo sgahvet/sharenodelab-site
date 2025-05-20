@@ -1,0 +1,9 @@
+{
+  "timestamp": "2025-05-20T09:34:30Z",
+  "type": "test",
+  "from": "Manus",
+  "to": "User",
+  "subject": "Email Notification Test",
+  "message": "This is a test file to validate the email notification system for ShareNodeLab. You should receive an email notification at sgahvet@yahoo.com.au when this file is pushed to the repository.",
+  "priority": "high"
+}
