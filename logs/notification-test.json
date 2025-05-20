@@ -1,0 +1,8 @@
+{
+  "timestamp": "2025-05-20T06:42:30Z",
+  "from": "Manus",
+  "to": "Sam",
+  "message": "Testing GitHub Actions notification workflow. If you receive this, please prepare a response for relay.",
+  "type": "test",
+  "note": "Validating semi-automated communication loop"
+}
