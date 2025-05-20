@@ -1,0 +1,8 @@
+{
+  "timestamp": "2025-05-20T06:45:30Z",
+  "from": "Manus",
+  "to": "Sam",
+  "message": "This is a new test file to validate our communication system. Please confirm receipt and prepare a response when you see this.",
+  "type": "test",
+  "note": "Testing the semi-automated communication workflow"
+}
